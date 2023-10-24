@@ -17,7 +17,7 @@ def is_proposition(token: str) -> bool:
 
 def is_operator(token: str) -> str:
     """Takes a token from a logical formula and returns whether that token is
-    """
+    an operator or not. Valid operators are ¬, ∧, ∨, ⇒, and ⇔."""
     if token in PRECEDENCE:
         return True
     return False
@@ -34,6 +34,7 @@ def count_identifiers(exp: str) -> tuple[int, list]:
     propositional identifiers that appear in it."""
     exp = exp.replace(" ", "")
 
+    # using  set to get rid of duplicates
     identifiers = set()
 
     for token in exp:
@@ -49,6 +50,7 @@ def produce_truth_combinations(count: int, identifiers: list) -> list[dict]:
 
     truth_combinations = []
 
+    # basically count down in binary
     for i in range(pow(2, len(identifiers)) - 1, -1, -1):
         combination = {}
         binary = pad_zeros(str(bin(i))[2:], count)
@@ -132,9 +134,9 @@ def evaluate_postfix(exp: str, truth_values: dict) -> bool:
     eval_stack = list(exp)
     current = []
 
+    # while there are still propositions left on the stack or there is an 
+    # operator left to be applied to the propositions in `current`
     while len(eval_stack) > 1 or is_operator(eval_stack[0]):
-        # print(current, eval_queue)
-
         if isinstance(eval_stack[0], bool):
             current.append(eval_stack.pop(0))
 
@@ -143,6 +145,10 @@ def evaluate_postfix(exp: str, truth_values: dict) -> bool:
         
         else:
             operator = eval_stack.pop(0)
+            # negation is a unary operator
+            # strictly speaking, this is a shortcut: i should have put the
+            # negation of the proposition back onto the stack and then
+            # pulled it back out but eh
             if operator == "¬":
                 current[-1] = not current[-1]
             else:

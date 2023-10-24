@@ -1,5 +1,6 @@
 from lib import shunting_yard, evaluate_postfix, count_identifiers, produce_truth_combinations
 
+# ASCII escape codes to print the truth values in colour
 RED = "\033[0;31m"
 GREEN = "\033[0;32m"
 ENDCOLOUR = "\033[0m"
