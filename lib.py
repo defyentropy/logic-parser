@@ -228,12 +228,13 @@ def evaluate_postfix(exp: str, truth_values: dict) -> bool:
 def main():
     # print(produce_truth_combinations(*(count_identifiers("¬p ∧ q ∨ ¬q ∧ r"))))
     # print(get_subexps(shunting_yard("¬(p ∧ q) ∨ ¬(p ∧ q)")))
-    print(
-        evaluate_postfix(
-            exp=shunting_yard("p ∧ (q ∨ r) ⇔ (p ∧ q) ∨ (p ∧ r)"),
-            truth_values={"p": True, "q": False, "r": True},
-        )
-    )
+    # print(
+    #     evaluate_postfix(
+    #         exp=shunting_yard("p ∧ (q ∨ r) ⇔ (p ∧ q) ∨ (p ∧ r)"),
+    #         truth_values={"p": True, "q": False, "r": True},
+    #     )
+    # )
+    print(get_subexps(shunting_yard("p ∧ q ∧ r")))
 
 
 if __name__ == "__main__":

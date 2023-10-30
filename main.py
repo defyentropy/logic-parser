@@ -16,23 +16,42 @@ ENDCOLOUR = "\033[0m"
 
 
 def main():
-    if len(sys.argv) == 2:
-        exp = sys.argv[1]
-        output_to_file = False
-    elif len(sys.argv) == 4 and sys.argv[1] == "-o":
-        exp = sys.argv[3]
-        output_to_file = True
-        file_name = sys.argv[2]
+    exps = [
+        "(p ∨ q) ⇔ (q ∨ p)",
+        "(p ∧ q) ⇔ (q ∧ p)",
+        "(p ∧ (q ∧ r)) ⇔ ((p ∧ q) ∧ r)",
+        "(p ∨ (q ∧ r)) ⇔ ((p ∨ q) ∧ (p ∨ r))",
+        "(p ∧ (q ∨ r)) ⇔ ((p ∧ q) ∨ (p ∧ r))",
+        "(p ∨ p) ⇔ (p)",
+        "(p ∧ p) ⇔ (p)",
+        # "(p ∨ ¬p) ⇔ (True)",
+        # "(p ∧ ¬p) ⇔ (False)",
+        "(¬(¬p)) ⇔ (p)",
+        "(p ⇒ q) ⇔ (¬p ∨ q)",
+        "(¬(p ∧ q)) ⇔ (¬p ∨ ¬q)",
+        "(¬(p ∨ q)) ⇔ (¬p ∧ ¬q)",
+        "(p ⇔ q) ⇔ ((p ⇒ q) ∧ (q ⇒ p))",
+    ]
 
+    for exp in exps:
+        generate_truth_table(exp)
+        print()
+        # print(exp)
+
+    print("Complete!")
+
+
+def generate_truth_table(exp: str, file_name=""):
     postfix = shunting_yard(exp)
     count, identifiers = count_identifiers(exp)
     truth_combinations = produce_truth_combinations(count, identifiers)
     subexps = get_subexps(postfix, list_format=True)
 
-    if output_to_file:
-        with open(file_name, "w", newline="", encoding="utf-8") as csv_file:
+    if file_name:
+        with open(f"output/{file_name}", "a", newline="", encoding="utf-8") as csv_file:
             ttable_writer = csv.writer(csv_file)
-
+            ttable_writer.writerow([exp])
+            ttable_writer.writerow([])
             ttable_writer.writerow(identifiers + subexps)
 
             for truth_combination in truth_combinations:
@@ -48,6 +67,7 @@ def main():
                 )
 
                 ttable_writer.writerow(row)
+            ttable_writer.writerow([])
     else:
         for identifier in identifiers:
             print(identifier, end="\t")
